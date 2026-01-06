@@ -17,8 +17,8 @@ export default function AppNavigator() {
         screenOptions={{ headerShown: false }}
       >
         {/* <Stack.Screen name="Splash" component={SplashScreen} /> */}
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Login" component={LoginScreen}  options={{ animation: 'fade' }} />
+        <Stack.Screen name="Signup" component={SignupScreen}  options={{ animation: 'fade' }} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>

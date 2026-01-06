@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Image, Alert } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../firebase/config'; 
+import { auth, db } from '../../firebase/config';
 import { doc, setDoc } from 'firebase/firestore';
 
 const SignupScreen = ({ navigation }) => {
@@ -11,39 +20,86 @@ const SignupScreen = ({ navigation }) => {
   const [whatsapp, setWhatsapp] = useState('');
 
   const handleSignup = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
 
-      await setDoc(doc(db, 'users', user.uid), {
-        fullName: fullName,
-        whatsapp: whatsapp,
-        email: email,
-      });
+  if (!fullName || !whatsapp || !email || !password) {
+    Alert.alert(
+      'Incomplete Details',
+      'Please fill all the fields to continue.'
+    );
+    return;
+  }
 
-      Alert.alert('Success', 'Account created successfully!');
+  const emailRegex = /\S+@\S+\.\S+/;
+  if (!emailRegex.test(email)) {
+    Alert.alert(
+      'Invalid Email',
+      'Please enter a valid email address.'
+    );
+    return;
+  }
 
-  
-      setEmail('');
-      setPassword('');
-      setFullName('');
-      setWhatsapp('');
+  if (password.length < 6) {
+    Alert.alert(
+      'Weak Password',
+      'Password must be at least 6 characters long.'
+    );
+    return;
+  }
 
-      navigation.navigate('Login');
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
+  if (whatsapp.length < 10) {
+    Alert.alert(
+      'Invalid WhatsApp Number',
+      'Please enter a valid WhatsApp number.'
+    );
+    return;
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = userCredential.user;
+
+    await setDoc(doc(db, 'users', user.uid), {
+      fullName,
+      whatsapp,
+      email,
+      createdAt: new Date(),
+    });
+
+    Alert.alert(
+      'Success 🎉',
+      'Account created successfully!'
+    );
+
+    navigation.navigate('Login');
+
+  } catch (error) {
+    Alert.alert(
+      'Signup Failed',
+      error.message
+    );
+  }
+};
+
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/1.png')} style={styles.welcomeImage} />
-      <Text style={styles.heading}>Sign Up for Velvet Threads</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        source={require('../../assets/EDIFY.png')}
+        style={styles.logo}
+      />
+
+      <Text style={styles.heading}>Create Account</Text>
+      <Text style={styles.subHeading}>Track your subjects, marks & academic progress 🚀</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        placeholderTextColor="gray"
+        placeholderTextColor="#999"
         value={fullName}
         onChangeText={setFullName}
       />
@@ -51,16 +107,16 @@ const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="WhatsApp Number"
-        placeholderTextColor="gray"
+        placeholderTextColor="#999"
+        keyboardType="phone-pad"
         value={whatsapp}
         onChangeText={setWhatsapp}
-        keyboardType="phone-pad"
       />
 
       <TextInput
         style={styles.input}
         placeholder="Email"
-        placeholderTextColor="gray"
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
       />
@@ -68,70 +124,92 @@ const SignupScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Password"
-        placeholderTextColor="gray"
+        placeholderTextColor="#999"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
 
-      <Button title="Sign Up" onPress={handleSignup} color="grey" />
+    
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
 
       <Text style={styles.loginText}>
         Already have an account?{' '}
-        <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.loginLink} onPress={() => navigation.replace('Login')}>
           Login
         </Text>
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#5c311c',
+    flexGrow: 1,
+    backgroundColor: '#5f2d03ff',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
   },
+
+  logo: {
+    width: 180,
+    height: 180,
+    resizeMode: 'contain',
+    marginBottom: 10,
+  },
+
   heading: {
-    fontSize: 32,
-    color: 'white',
-    marginBottom: 20,
+    fontSize: 30,
+    color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center',
+    marginTop: 10,
   },
+
+  subHeading: {
+    fontSize: 12,
+    color: '#ddd',
+    marginBottom: 30,
+  },
+
   input: {
-    width: '80%',
-    height: 45,
-    backgroundColor: '#f1f1f1',
-    borderRadius: 8,
-    marginBottom: 20,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#fff',
+    borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    marginBottom: 15,
   },
-  loginText: {
-    color: 'white',
-    marginTop: 20,
-    fontSize: 14,
-    textAlign: 'center',
+
+  button: {
+    width: '100%',
+    height: 52,
+    backgroundColor: '#F3E9DC',
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    elevation: 4,
   },
-  loginLink: {
-    color: 'gainsboro',
+
+  buttonText: {
+    color: '#5f2d03',
+    fontSize: 18,
     fontWeight: 'bold',
-    textDecorationLine: 'underline',
   },
-  welcomeImage: {
-    width: 220,
-    height: 220,
-    resizeMode: 'contain',
-    marginBottom: 20,
-    borderRadius: 25,
-    borderWidth: 2,
-    borderColor: 'grey',
+
+  loginText: {
+    color: '#eee',
+    marginTop: 25,
+    fontSize: 14,
+  },
+
+  loginLink: {
+    color: '#ffd7a8',
+    fontWeight: 'bold',
   },
 });
-
 export default SignupScreen;

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "student-profile",
+    "name": "EDIFY APP",
     "slug": "student-profile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/EDIFY-SA.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

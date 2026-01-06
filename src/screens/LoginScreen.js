@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet,Image, ActivityIndicator } from 'react-native'; 
+import { View, TextInput, Button, Text, StyleSheet,Image, ActivityIndicator,Pressable } from 'react-native'; 
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig'; 
+import { auth } from '../../firebase/config'; 
 
 
 const LoginScreen = () => {
@@ -36,11 +36,11 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
         <Image
-        source={require('../assets/1.png')} 
+        source={require('../../assets/EDIFY.png')} 
         style={styles.welcomeImage}
       />
     
-      <Text style={styles.heading}>Login to Velvet Threads</Text>
+      <Text style={styles.heading}>Login to Edify</Text>
 
       <TextInput
         style={styles.input}
@@ -62,14 +62,18 @@ const LoginScreen = () => {
      
      
 {loading ? (
-        <ActivityIndicator size="large" color="white" /> 
-      ) : (
-        <Button title="Login" onPress={handleLogin} color="grey" />
-      )}
+  <ActivityIndicator size="large" color="#F5EBDD" />
+) : (
+  <Pressable style={styles.button} onPress={handleLogin}>
+    <Text style={styles.buttonText}>Login</Text>
+  </Pressable>
+)}
+
+
 
       <Text style={styles.signupText}>
         Don't have an account?{' '}
-        <Text style={styles.signupLink} onPress={() => navigation.navigate('Signup')}>
+        <Text style={styles.signupLink} onPress={() => navigation.replace('Signup')}>
           Sign Up
         </Text>
       </Text>
@@ -78,83 +82,69 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#5c311c',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-    },
+   container: {
+  flex: 1,
+  backgroundColor: '#5f2d03ff',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+},
 
-    LoginButton :{
+heading: {
+  fontSize: 35,
+  color: '#F5EBDD',
+  marginBottom: 40,
+  fontWeight: 'bold',
+  textAlign: 'center',
+},
 
-    },
-    heading: {
-      fontSize: 32,
-      color: 'white',
-      marginBottom: 30,
-      fontWeight: 'bold',
-      textAlign: 'center', 
-    },
-    formContainer: {
-      width: '90%',
-      backgroundColor: 'white', 
-      borderRadius: 12,
-      padding: 20,
-      borderWidth: 2,
-      borderColor: '#5c311c', 
-      shadowColor: 'black',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4,
-      elevation: 5, 
-    },
-    input: {
-      width: '80%',
-      height: 45,
-      backgroundColor: 'gainsboro', 
-      borderRadius: 8,
-      marginBottom: 20,
-      paddingHorizontal: 15,
-      fontSize: 16,
-      borderWidth: 1,
-      borderColor: '#ddd', 
-    },
-    button: {
-      width: '100%',
-      height: 45,
-      backgroundColor: '#5c311c', 
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 8,
-      marginBottom: 20,
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-    signupText: {
-      color: 'white',
-      marginTop: 20,
-      fontSize: 16,
-      textAlign: 'center', 
-    },
-    signupLink: {
-      color: 'white',
-      fontWeight: 'bold',
-      textDecorationLine: 'underline', 
+welcomeImage: {
+  width: 200,
+  height: 200,
+  resizeMode: 'contain',
+  marginBottom: 15,
+},
 
-    },
-    welcomeImage: {
-      width: 250,
-      height: 250,
-      resizeMode: 'contain',
-      marginBottom: 30,
-      borderRadius: 20,
-      borderWidth: 5,
-      borderColor: 'grey',
-    },
+input: {
+  width: '100%',
+  height: 48,
+  backgroundColor: '#E8DED5',
+  borderRadius: 10,
+  marginBottom: 16,
+  paddingHorizontal: 16,
+  fontSize: 16,
+  borderWidth: 0,
+},
+
+button: {
+  width: '100%',
+  height: 48,
+  backgroundColor: '#F3E9DC',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  marginTop: 10,
+},
+
+buttonText: {
+  color: '#5f2d03ff',
+  fontSize: 18,
+  fontWeight: '600',
+},
+
+signupText: {
+  color: '#F5EBDD',
+  marginTop: 18,
+  fontSize: 15,
+  textAlign: 'center',
+},
+
+signupLink: {
+  color: '#FFD6A5',
+  fontWeight: 'bold',
+  textDecorationLine: 'underline',
+},
+
   });
   
 
