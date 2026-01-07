@@ -6,6 +6,8 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import SubjectDetailScreen from '../screens/SubjectDetailScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +23,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Signup" component={SignupScreen}  options={{ animation: 'fade' }} />
         <Stack.Screen name="Dashboard" component={DashboardScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="SubjectDetail" component={SubjectDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
